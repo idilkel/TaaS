@@ -1,7 +1,7 @@
 package com.jb.TaaS.clr;
 
-import com.jb.TaaS.beans.Task;
-import com.jb.TaaS.exceptions.CustomTaskException;
+import com.jb.TaaS.dto.TaskDto;
+import com.jb.TaaS.exceptions.TaskSystemException;
 import com.jb.TaaS.services.TaskService;
 import com.jb.TaaS.utils.ArtUtils;
 import com.jb.TaaS.utils.TestUtils;
@@ -26,10 +26,10 @@ public class ServicesTesting implements CommandLineRunner {
 
         try {
             TestUtils.printTitle("Add new task and get all tasks");
-            Task task1 = Task.builder().group("java147").description("Coupon System Phase 2").when(Timestamp.valueOf(LocalDateTime.of(2022, 6, 20, 9, 00))).build();
-            taskService.addTask(task1);
+            TaskDto taskDto1 = TaskDto.builder().caption("java147").classification("java147").info("Coupon System Phase 2").dueDate((LocalDateTime.of(2022, 6, 20, 9, 00))).build();
+            taskService.addTask(taskDto1);
             taskService.getAllTasks().forEach(System.out::println);
-        } catch (CustomTaskException e) {
+        } catch (TaskSystemException e) {
             //e.printStackTrace();
             System.out.println(e);
         }
@@ -37,7 +37,7 @@ public class ServicesTesting implements CommandLineRunner {
         try {
             TestUtils.printTitle("Get one task#2");
             System.out.println(taskService.getOneTask(2));
-        } catch (CustomTaskException e) {
+        } catch (TaskSystemException e) {
             //e.printStackTrace();
             System.out.println(e);
         }
@@ -45,49 +45,50 @@ public class ServicesTesting implements CommandLineRunner {
         try {
             TestUtils.printTitle("Get un-existing task#20");
             System.out.println(taskService.getOneTask(20));
-        } catch (CustomTaskException e) {
+        } catch (TaskSystemException e) {
             //e.printStackTrace();
             System.out.println(e);
         }
 
         try {
             TestUtils.printTitle("Try to add an existing task#1");
-            Task task1 = taskService.getOneTask(1);
-            taskService.addTask(task1);
-        } catch (CustomTaskException e) {
+            TaskDto taskDto1 = taskService.getOneTask(1);
+            taskService.addTask(taskDto1);
+        } catch (TaskSystemException e) {
             //e.printStackTrace();
             System.out.println(e);
         }
 
         try {
             TestUtils.printTitle("Updating task#1");
-            Task task1 = taskService.getOneTask(1);
+            TaskDto taskDto1 = taskService.getOneTask(1);
             System.out.println("Task#1 before update");
-            System.out.println(task1);
-            task1.setDescription("Spring exam");
-            task1.setWhen(Timestamp.valueOf(LocalDateTime.now().plusDays(5)));
-            taskService.updateTask(1, task1);
-            task1 = taskService.getOneTask(1);
+            System.out.println(taskDto1);
+            taskDto1.setInfo("Spring exam");
+            taskDto1.setDueDate(LocalDateTime.now().plusDays(5));
+            // TODO: 23/05/2022 problem TaskDto doen't have a user. The user is deleted on the update
+            taskService.updateTask(1, taskDto1);
+            taskDto1 = taskService.getOneTask(1);
             System.out.println("Task#1 after update");
-            System.out.println(task1);
-        } catch (CustomTaskException e) {
+            System.out.println(taskDto1);
+        } catch (TaskSystemException e) {
             //e.printStackTrace();
             System.out.println(e);
         }
 
         try {
             TestUtils.printTitle("Updating unexisting task#20");
-            Task task1 = taskService.getOneTask(1);
+            TaskDto taskDto1 = taskService.getOneTask(1);
             System.out.println("Task#1 before update");
-            System.out.println(task1);
-            task1.setDescription("Spring exam");
-            task1.setId(20);
-            task1.setWhen(Timestamp.valueOf(LocalDateTime.now().plusDays(5)));
-            taskService.updateTask(20, task1);
-            task1 = taskService.getOneTask(1);
+            System.out.println(taskDto1);
+            taskDto1.setInfo("Spring exam");
+            taskDto1.setId(20);
+            taskDto1.setDueDate(LocalDateTime.now().plusDays(5));
+            taskService.updateTask(20, taskDto1);
+            taskDto1 = taskService.getOneTask(1);
             System.out.println("Task#1 after update");
-            System.out.println(task1);
-        } catch (CustomTaskException e) {
+            System.out.println(taskDto1);
+        } catch (TaskSystemException e) {
             //e.printStackTrace();
             System.out.println(e);
         }
@@ -103,7 +104,7 @@ public class ServicesTesting implements CommandLineRunner {
             taskService.getAllTasksBetween(start, end).forEach(System.out::println);
             TestUtils.printTitle("Get all tasks between end date before start date");
             taskService.getAllTasksBetween(end, start).forEach(System.out::println);
-        } catch (CustomTaskException e) {
+        } catch (TaskSystemException e) {
             //e.printStackTrace();
             System.out.println(e);
         }

@@ -1,13 +1,15 @@
-package com.jb.TaaS.advice;
+package com.jb.TaaS.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ErrDetails {
-    private String key;
-    private String value;
+public class LoginResDto {
+
+    private UUID token;
 }

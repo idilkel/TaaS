@@ -1,16 +1,18 @@
 package com.jb.TaaS.controllers;
 
-import com.jb.TaaS.beans.Task;
-import com.jb.TaaS.exceptions.CustomTaskException;
+import com.jb.TaaS.dto.TaskDto;
+import com.jb.TaaS.dto.TaskPayloadDto;
+import com.jb.TaaS.exceptions.TaskSystemException;
 import com.jb.TaaS.services.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/taas")
+@RequestMapping("api/tasks")
 @RequiredArgsConstructor
 public class TaskController {
 
@@ -18,17 +20,17 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void addTask(@RequestBody Task task) throws CustomTaskException {
-        taskService.addTask(task);
+    public void addTask(@Valid @RequestBody TaskPayloadDto taskPayloadDto) throws TaskSystemException {
+        taskService.addTask(new TaskDto(taskPayloadDto));
     }
 
     @GetMapping("/{id}")
-    public Task getOneTask(@PathVariable int id) throws CustomTaskException {
+    public TaskDto getOneTask(@PathVariable int id) throws TaskSystemException {
         return taskService.getOneTask(id);
     }
 
     @GetMapping
-    public List<Task> getAllTasks() throws CustomTaskException {
+    public List<TaskDto> getAllTasks() throws TaskSystemException {
         return taskService.getAllTasks();
     }
 
