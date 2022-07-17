@@ -7,7 +7,14 @@ import java.util.List;
 
 public interface UserService {
 
-    void addTask(int userId, TaskDto taskDto) throws TaskSystemException;
+    TaskDto addTask(int userId, TaskDto taskDto) throws TaskSystemException;
 
     List<TaskDto> getAllTasks(int userId);
+
+    int count(int userId);
+
+    TaskDto updateTask(int userId, int id, TaskDto taskDto) throws TaskSystemException;
+
+    void deleteTask(int userId, int id) throws TaskSystemException;
+
 }

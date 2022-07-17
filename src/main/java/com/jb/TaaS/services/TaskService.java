@@ -7,9 +7,12 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public interface TaskService {
-    void addTask(TaskDto taskDto) throws TaskSystemException;
 
-    void updateTask(int id, TaskDto taskDto) throws TaskSystemException;
+    //    void addTask(TaskDto taskDto) throws TaskSystemException;
+//    void updateTask(int taskId,TaskDto taskDto) throws TaskSystemException;
+    TaskDto addTask(TaskDto taskDto) throws TaskSystemException;
+
+    TaskDto updateTask(int id, TaskDto taskDto) throws TaskSystemException;
 
     void deleteTask(int id) throws TaskSystemException;
 
@@ -17,10 +20,12 @@ public interface TaskService {
 
     List<TaskDto> getAllTasks();
 
-    List<TaskDto> getAllTasksAsc();
 
-    List<TaskDto> getAllTasksDesc();
+    int count();
+
+    List<TaskDto> getAllTasksOrderByTimeAsc();
+
+    List<TaskDto> getAllTasksOrderByTimeDesc();
 
     List<TaskDto> getAllTasksBetween(Timestamp startDate, Timestamp endDate) throws TaskSystemException;
-
 }

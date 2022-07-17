@@ -66,11 +66,12 @@ public class ServicesTesting implements CommandLineRunner {
             System.out.println(taskDto1);
             taskDto1.setInfo("Spring exam");
             taskDto1.setDueDate(LocalDateTime.now().plusDays(5));
-            // TODO: 23/05/2022 problem TaskDto doen't have a user. The user is deleted on the update
             taskService.updateTask(1, taskDto1);
             taskDto1 = taskService.getOneTask(1);
             System.out.println("Task#1 after update");
             System.out.println(taskDto1);
+            System.out.println("****************************");
+            System.out.println(taskDto1.getDueDate());
         } catch (TaskSystemException e) {
             //e.printStackTrace();
             System.out.println(e);
@@ -95,9 +96,9 @@ public class ServicesTesting implements CommandLineRunner {
 
         try {
             TestUtils.printTitle("Get all tasks ascending");
-            taskService.getAllTasksAsc().forEach(System.out::println);
+            taskService.getAllTasksOrderByTimeAsc().forEach(System.out::println);
             TestUtils.printTitle("Get all tasks descending");
-            taskService.getAllTasksDesc().forEach(System.out::println);
+            taskService.getAllTasksOrderByTimeDesc().forEach(System.out::println);
             TestUtils.printTitle("Get all tasks between");
             Timestamp start = Timestamp.valueOf(LocalDateTime.now());
             Timestamp end = Timestamp.valueOf(LocalDateTime.now().plusWeeks(1));

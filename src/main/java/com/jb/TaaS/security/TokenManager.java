@@ -28,7 +28,7 @@ public class TokenManager {
         Information information = new Information();
         information.setUserId(userId);
         information.setType(userDB.getType());
-        information.setEmail(userDB.getEmail());
+        information.setEmail(email);
         information.setTime(LocalDateTime.now());
 
         UUID token = UUID.randomUUID();
@@ -50,6 +50,6 @@ public class TokenManager {
 
     @Scheduled(fixedRate = 1000 * 60)
     public void deleteExpiredTokenOver30Minutes() {
-        map.entrySet().removeIf(ins -> ins.getValue().getTime().isBefore(LocalDateTime.now()));
+        map.entrySet().removeIf(ins -> ins.getValue().getTime().isBefore(LocalDateTime.now().minusMinutes(30)));
     }
 }

@@ -22,15 +22,36 @@ public class UserServiceImpl implements UserService {
     private final TaskMapperImpl taskMapper;
 
     @Override
-    public void addTask(int userId, TaskDto taskDto) throws TaskSystemException {
+    public TaskDto addTask(int userId, TaskDto taskDto) throws TaskSystemException {
         Task task = (Task) taskMapper.toDaO(taskDto); // TODO: 20/05/2022 should not give object, but Task. Why casting required?
         User user = userRepository.findById(userId).orElseThrow(() -> new TaskSystemException(ErrMsg.ID_DOESNT_EXIST));
         task.setUser(user);
-        taskRepository.save(task);
+        return taskMapper.toDto(taskRepository.save(task));
+
     }
 
     @Override
     public List<TaskDto> getAllTasks(int userId) {
         return taskMapper.toDtoList(taskRepository.findByUserId(userId));
+    }
+
+    @Override
+    public int count(int userId) {
+        return (int) taskRepository.countByUserId(userId);
+    }
+
+    @Override
+    public TaskDto updateTask(int userId, int id, TaskDto taskDto) throws TaskSystemException {
+        taskDto.setId(id);
+        Task task = (Task) taskMapper.toDaO(taskDto); // TODO: 20/05/2022 should not give object, but Task. Why casting required?
+        User user = userRepository.findById(userId).orElseThrow(() -> new TaskSystemException(ErrMsg.ID_DOESNT_EXIST));
+        task.setUser(user);
+        // TODO: 23/05/2022 the user on this task is deleted on the update. consider adding user to dto
+        return taskMapper.toDto(taskRepository.saveAndFlush(task));
+    }
+
+    @Override
+    public void deleteTask(int userId, int id) throws TaskSystemException {
+        taskRepository.deleteByIdAndUserId(id, userId);
     }
 }

@@ -18,24 +18,44 @@ public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final TaskMapperImpl taskMapper;
 
+//    @Override
+//    public void addTask(TaskDto taskDto) throws TaskSystemException {
+//        int id = taskDto.getId();
+//        if (taskRepository.existsById(id)) {
+//            throw new TaskSystemException(ErrMsg.ID_ALREADY_EXIST);
+//        }
+//        Task task = taskMapper.toDao(taskDto);
+//        taskRepository.save(task);
+//    }
+
+    //    @Override
+//    public void updateTask(int taskId, TaskDto taskDto) throws TaskSystemException {
+//        taskDto.setId(taskId);
+//        if (!taskRepository.existsById(taskId)) {
+//            throw new TaskSystemException(ErrMsg.ID_NOT_EXIST);
+//        }
+//        Task task = taskMapper.toDao(taskDto);
+//        taskRepository.saveAndFlush(task);
+//    }
+//
 
     @Override
-    public void addTask(TaskDto taskDto) throws TaskSystemException {
+    public TaskDto addTask(TaskDto taskDto) throws TaskSystemException {
         if (taskRepository.existsById(taskDto.getId())) {
             throw new TaskSystemException(ErrMsg.ID_ALREADY_EXISTS);
         }
-        taskRepository.save(taskMapper.toDaO(taskDto));
+        return taskMapper.toDto(taskRepository.save(taskMapper.toDaO(taskDto)));
     }
 
     @Override
-    public void updateTask(int id, TaskDto taskDto) throws TaskSystemException {
+    public TaskDto updateTask(int id, TaskDto taskDto) throws TaskSystemException {
         taskDto.setId(id);
         if (!taskRepository.existsById(id)) {
             throw new TaskSystemException(ErrMsg.ID_DOESNT_EXIST);
         }
-        
+
         // TODO: 23/05/2022 the user on this task is deleted on the update. consider adding user to dto  
-        taskRepository.saveAndFlush(taskMapper.toDaO(taskDto));
+        return taskMapper.toDto(taskRepository.saveAndFlush(taskMapper.toDaO(taskDto)));
     }
 
     @Override
@@ -56,20 +76,43 @@ public class TaskServiceImpl implements TaskService {
         return taskMapper.toDtoList(taskRepository.findAll());
     }
 
+//    @Override
+//    public List<TaskDto> getAllTasksAsc() {
+//        return taskMapper.toDtoList(taskRepository.findAllByOrderByWhenAsc());
+//    }
+//
+//    @Override
+//    public List<TaskDto> getAllTasksDesc() {
+//        return taskMapper.toDtoList(taskRepository.findAllByOrderByWhenDesc());
+//    }
+//
+//    @Override
+//    public List<TaskDto> getAllTasksBetween(Timestamp startDate, Timestamp endDate) throws TaskSystemException {
+//        if (startDate.after(endDate)) {
+//            throw new TaskSystemException(ErrMsg.START_DATE_CANT_BE_AFTER_END_DATE);
+//        }
+//        return taskMapper.toDtoList(taskRepository.findAllByWhenBetween(startDate, endDate));
+//    }
+
     @Override
-    public List<TaskDto> getAllTasksAsc() {
+    public int count() {
+        return (int) taskRepository.count();
+    }
+
+    @Override
+    public List<TaskDto> getAllTasksOrderByTimeAsc() {
         return taskMapper.toDtoList(taskRepository.findAllByOrderByWhenAsc());
     }
 
     @Override
-    public List<TaskDto> getAllTasksDesc() {
+    public List<TaskDto> getAllTasksOrderByTimeDesc() {
         return taskMapper.toDtoList(taskRepository.findAllByOrderByWhenDesc());
     }
 
     @Override
     public List<TaskDto> getAllTasksBetween(Timestamp startDate, Timestamp endDate) throws TaskSystemException {
-        if (startDate.after(endDate)) {
-            throw new TaskSystemException(ErrMsg.START_DATE_CANT_BE_AFTER_END_DATE);
+        if (endDate.before(startDate)) {
+            throw new TaskSystemException(ErrMsg.INVALID_DATES);
         }
         return taskMapper.toDtoList(taskRepository.findAllByWhenBetween(startDate, endDate));
     }

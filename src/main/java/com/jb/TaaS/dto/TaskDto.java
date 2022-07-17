@@ -1,5 +1,9 @@
 package com.jb.TaaS.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.jb.TaaS.beans.User;
 import lombok.*;
 
@@ -20,6 +24,9 @@ public class TaskDto {
     @NotBlank
     private String classification;
     @NotBlank
+//    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime dueDate;
 
     //I added since user disappears on update

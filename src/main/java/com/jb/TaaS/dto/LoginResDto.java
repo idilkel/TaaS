@@ -12,4 +12,5 @@ import java.util.UUID;
 public class LoginResDto {
 
     private UUID token;
+    private String email;
 }

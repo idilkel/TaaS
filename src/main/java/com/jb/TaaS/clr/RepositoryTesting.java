@@ -76,5 +76,12 @@ public class RepositoryTesting implements CommandLineRunner {
             System.out.println(e);
         }
 
+        try {
+            System.out.println("~~~~~~~~~~~~~~~~Number of tasks of user2:~~~~~~~~~~~~~~~~~~~~~~");
+            System.out.println(taskRepository.countByUserId(2));
+        } catch (Exception e) {
+            //e.printStackTrace();
+            System.out.println(e);
+        }
     }
 }

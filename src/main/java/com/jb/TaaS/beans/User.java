@@ -1,5 +1,6 @@
 package com.jb.TaaS.beans;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,8 +16,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    //@Column(unique = true)
-    // TODO: 22/05/2022 unique: does it interfere?
+    @Column(unique = true)
     private String email;
 
     private String password;
@@ -25,5 +25,6 @@ public class User {
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user")
     @Singular
+    @JsonManagedReference
     private List<Task> tasks = new ArrayList<>();
 }

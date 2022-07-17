@@ -1,5 +1,6 @@
 package com.jb.TaaS.beans;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -30,5 +31,6 @@ public class Task {
 
     @ManyToOne
     @ToString.Exclude
+    @JsonBackReference
     private User user;
 }
