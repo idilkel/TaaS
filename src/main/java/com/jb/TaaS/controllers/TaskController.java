@@ -50,7 +50,7 @@ public class TaskController {
 //    }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
     public TaskDto updateTask(@PathVariable int id, @RequestBody TaskPayloadDto taskDto) throws TaskSystemException {
         return taskService.updateTask(id, new TaskDto(taskDto));
     }

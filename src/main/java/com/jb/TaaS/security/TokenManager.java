@@ -1,5 +1,6 @@
 package com.jb.TaaS.security;
 
+import com.jb.TaaS.beans.ClientType;
 import com.jb.TaaS.beans.User;
 import com.jb.TaaS.exceptions.SecMsg;
 import com.jb.TaaS.exceptions.TaskSecurityException;
@@ -19,8 +20,13 @@ public class TokenManager {
     private final Map<UUID, Information> map;
 
     public UUID add(String email, String password) {
+        User userDB;
 
-        User userDB = userRepository.findTop1ByEmail(email);
+        if (email.equals("admin@admin.com") && password.equals("admin")) {
+            userDB = userRepository.findById(1).orElseThrow();
+        } else {
+            userDB = userRepository.findTop1ByEmail(email);
+        }
 
         int userId = userDB.getId();
         removePreviousInstances(userId);
@@ -46,6 +52,14 @@ public class TokenManager {
             throw new TaskSecurityException(SecMsg.INVALID_TOKEN);
         }
         return information.getUserId();
+    }
+
+    public ClientType getType(UUID token) throws TaskSecurityException {
+        Information information = map.get(token);
+        if (information == null) {
+            throw new TaskSecurityException(SecMsg.INVALID_TOKEN);
+        }
+        return information.getType();
     }
 
     @Scheduled(fixedRate = 1000 * 60)

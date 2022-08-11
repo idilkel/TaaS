@@ -3,6 +3,7 @@ package com.jb.TaaS.services;
 import com.jb.TaaS.dto.TaskDto;
 import com.jb.TaaS.exceptions.TaskSystemException;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface UserService {
@@ -17,4 +18,9 @@ public interface UserService {
 
     void deleteTask(int userId, int id) throws TaskSystemException;
 
+    List<TaskDto> getAllUserTasksTimeAsc(int userId);
+
+    List<TaskDto> getAllUserTasksTimeDesc(int userId);
+
+    List<TaskDto> getAllTasksBetween(int userId, Timestamp startDate, Timestamp endDate) throws TaskSystemException;
 }

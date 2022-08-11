@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +29,7 @@ public class UserController {
         return userService.getAllTasks(userId);
     }
 
+    // TODO: 26/07/2022 return task and not void
     @PostMapping("/tasks/")
     public void addTask(@RequestHeader("Authorization") UUID token, @RequestBody TaskDto taskDto) throws TaskSecurityException, TaskSystemException {
         int userId = tokenManager.getUserId(token);
@@ -41,7 +43,7 @@ public class UserController {
     }
 
     @PutMapping("/tasks/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
     public TaskDto updateTask(@RequestHeader("Authorization") UUID token, @PathVariable int id, @RequestBody TaskPayloadDto taskDto) throws TaskSystemException, TaskSecurityException {
         int userId = tokenManager.getUserId(token);
         return userService.updateTask(userId, id, new TaskDto(taskDto));
@@ -53,4 +55,23 @@ public class UserController {
         int userId = tokenManager.getUserId(token);
         userService.deleteTask(userId, id);
     }
+
+    @GetMapping("/tasks/asc")
+    public List<TaskDto> getAllTasksAsc(@RequestHeader("Authorization") UUID token) throws TaskSecurityException {
+        int userId = tokenManager.getUserId(token);
+        return userService.getAllUserTasksTimeAsc(userId);
+    }
+
+    @GetMapping("/tasks/desc")
+    public List<TaskDto> getAllTasksDesc(@RequestHeader("Authorization") UUID token) throws TaskSecurityException {
+        int userId = tokenManager.getUserId(token);
+        return userService.getAllUserTasksTimeDesc(userId);
+    }
+
+    @GetMapping("/tasks/between")
+    public List<TaskDto> getAllTasksBetween(@RequestHeader("Authorization") UUID token, @RequestParam Timestamp startDate, @RequestParam Timestamp endDate) throws TaskSecurityException, TaskSystemException {
+        int userId = tokenManager.getUserId(token);
+        return userService.getAllTasksBetween(userId, startDate, endDate);
+    }
+
 }

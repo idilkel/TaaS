@@ -11,6 +11,7 @@ import com.jb.TaaS.repos.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -53,5 +54,28 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteTask(int userId, int id) throws TaskSystemException {
         taskRepository.deleteByIdAndUserId(id, userId);
+    }
+
+    @Override
+    public List<TaskDto> getAllUserTasksTimeAsc(int userId) {
+        return taskMapper.toDtoList(taskRepository.findAllByUserIdAndByOrderByWhenAsc(userId));
+    }
+
+
+    //    @Override
+//    public List<TaskDto> getAllUserTasksTimeAsc(int userId) {
+//        List<TaskDto> tasks = taskMapper.toDtoList(taskRepository.findByUserId(userId));
+//        Collections.sort(tasks, Comparator.comparing(TaskDto::getDueDate));
+//        return tasks;
+//    }
+//
+    @Override
+    public List<TaskDto> getAllUserTasksTimeDesc(int userId) {
+        return taskMapper.toDtoList(taskRepository.findAllByUserIdAndByOrderByWhenDesc(userId));
+    }
+
+    @Override
+    public List<TaskDto> getAllTasksBetween(int userId, Timestamp startDate, Timestamp endDate) throws TaskSystemException {
+        return taskMapper.toDtoList(taskRepository.findAllByUserIdAndByWhenBetween(userId, startDate, endDate));
     }
 }
