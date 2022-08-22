@@ -31,6 +31,9 @@ public class WelcomeServiceImpl implements WelcomeService {
 
     @Override
     public UUID login(String email, String password) throws TaskSecurityException {
+        if (!userRepository.existsByEmail(email)) {
+            throw new TaskSecurityException(SecMsg.EMAIL_DOESNT_EXIST);
+        }
         if (!userRepository.existsByEmailAndPassword(email, password)) {
             throw new TaskSecurityException(SecMsg.EMAIL_OR_PASSWORD_INCORRECT);
         }
