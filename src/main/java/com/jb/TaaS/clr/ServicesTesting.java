@@ -109,5 +109,17 @@ public class ServicesTesting implements CommandLineRunner {
             //e.printStackTrace();
             System.out.println(e);
         }
+
+        try {
+            TestUtils.printTitle("Delete task#5");
+            System.out.println("Tasks before delete:");
+            taskService.getAllTasks().forEach(System.out::println);
+            taskService.deleteTask(5);
+            System.out.println("Tasks after delete:");
+            taskService.getAllTasks().forEach(System.out::println);
+        } catch (TaskSystemException e) {
+            //e.printStackTrace();
+            System.out.println(e);
+        }
     }
 }

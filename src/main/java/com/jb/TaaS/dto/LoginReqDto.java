@@ -1,5 +1,6 @@
 package com.jb.TaaS.dto;
 
+import com.jb.TaaS.beans.ClientType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,4 +18,6 @@ public class LoginReqDto {
     private String email;
     @Length(min = 3, max = 8)
     private String password;
+
+    private ClientType type;
 }
