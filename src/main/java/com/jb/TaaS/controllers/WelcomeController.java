@@ -16,7 +16,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("api/welcome")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class WelcomeController {
 
     private final WelcomeService welcomeService;
